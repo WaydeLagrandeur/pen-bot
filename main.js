@@ -19,12 +19,12 @@ async function init() {
 
     //Every minute, the botThings() function will fire.
     //The every minute is to hopefully bypass the spam filter
-    while(true) {
+    // while(true) {
     
-        botThings(count)
-        await sleep(600000);
-        count++;  
-    } 
+    //     botThings(count)
+    //     await sleep(600000);
+    //     count++;  
+    // } 
 }
  
 function sleep(ms) {
@@ -85,6 +85,7 @@ async function botThings(nLoop) {
     robot.moveMouse(241, 746);
     //robot.mouseClick("left", true);
     //await sleep (750);
+    robot.mouseClick();
     robot.mouseClick("left", true);
     robot.keyToggle("control", "down");
     robot.keyTap("C");
