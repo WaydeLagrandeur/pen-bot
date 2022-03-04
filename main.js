@@ -8,23 +8,36 @@ IT IS CALIBRATED JUST FOR MY LOCAL MACHINE
 */
 
 var robot = require("robotjs");
-init()
+init();
 
 async function init() {
 
-    var mouse = robot.getMousePos();
-    console.log("Mouse is at x:" + mouse.x + " y:" + mouse.y);
+    let nPosts = 0;
+    //while(true) {
+        var mouse = robot.getMousePos();
+        console.log("Mouse is at x:" + mouse.x + " y:" + mouse.y);
+    //}
+
+    
     robot.setMouseDelay(6);
     let count = 1;
 
     //Every minute, the botThings() function will fire.
     //The every minute is to hopefully bypass the spam filter
-    // while(true) {
+
+    while(true) {
     
-    //     botThings(count)
-    //     await sleep(600000);
-    //     count++;  
-    // } 
+        await botThings(count);
+        count++;
+        nPosts++; 
+
+        if(nPosts >= 4) {
+            await changeLocation();
+            nPosts = 0;
+        }
+
+        await sleep(3000);  
+    } 
 }
  
 function sleep(ms) {
@@ -39,11 +52,19 @@ async function botThings(nLoop) {
     //Refresh page and move to the bottom of the page
     robot.moveMouse(96, 63);
     robot.mouseClick();
+    await sleep(2000);
 
-    for(let j = 0; j < 15; j++) {
-        robot.keyTap("pagedown");
+    // robot.moveMouse(96, 250);
+    // robot.mouseClick();
+
+    for(let j = 0; j < 6; j++) {
+        await sleep(500);
+        robot.keyTap("tab");
         //console.log("Pagedown pressed");
     }
+    robot.moveMouse(80, 510);
+    robot.mouseClick();
+    robot.keyTap("pagedown");
 
     //Bring up the dev options (Used for captcha solving later)
     robot.moveMouse(480, 510);
@@ -66,7 +87,7 @@ async function botThings(nLoop) {
     robot.keyTap("V");
     robot.keyToggle("control", "up");
 
-    //Copy Navy Seal CopyPasta to comments
+    //Copy CopyPasta to comments
     robot.moveMouse(1716, 130);
     robot.mouseClick();
     robot.keyToggle("control", "down");
@@ -79,13 +100,14 @@ async function botThings(nLoop) {
     robot.keyToggle("control", "down");
     robot.keyTap("V");
     robot.keyToggle("control", "up");
+    //robot.typeStringDelayed("" + nLoop, 3600);
     
     //Below grabs the equation from the Captcha from the dev tool screen, and copies it
     //move mouse to first side of equation
-    robot.moveMouse(241, 746);
+    robot.moveMouse(248, 780);
     //robot.mouseClick("left", true);
     //await sleep (750);
-    robot.mouseClick();
+    //robot.mouseClick();
     robot.mouseClick("left", true);
     robot.keyToggle("control", "down");
     robot.keyTap("C");
@@ -136,9 +158,44 @@ async function botThings(nLoop) {
     robot.keyToggle("control", "up");
 
     //Click Post
-    robot.moveMouse(635, 510);
+    robot.moveMouse(560, 517);
     robot.mouseClick();
-    await sleep(4000);
-    console.log("Done slep");
+    await sleep(1000);
+    robot.moveMouse(328, 314);
+    await sleep(1000);
+    robot.mouseClick();
+    await sleep(1000);
+    robot.moveMouse(145, 345);
+    await sleep(1000);
+    robot.mouseClick();
+    await sleep(2000);
+    // robot.moveMouse(150, 343);
+    // await sleep(2000);
+    // robot.mouseClick();
+    // await sleep(2000);
+    // robot.moveMouse(331, 313);
+    // await sleep(2000);
+    // robot.mouseClick();
+    // await sleep(2000);
+    console.log("Done loop");
 }
 
+async function changeLocation() {
+    //Access Nord screen
+    robot.moveMouse(1060, 1060);
+    robot.mouseClick();
+    await sleep(500)
+
+    //Disconnect and confirm
+    robot.moveMouse(1400, 570);
+    robot.mouseClick();
+    await sleep(500);
+    robot.moveMouse(1533, 715);
+    robot.mouseClick();
+    await sleep(500);
+
+    //Select Double VPN
+    robot.moveMouse(807, 207);
+    robot.mouseClick();
+    await sleep(3000);
+}
